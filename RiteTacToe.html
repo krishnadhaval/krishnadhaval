@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiteTacToe</title>
+    <style>
+
+        body {
+            font-family: 'Lucida Console', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            background-color: black;
+            border: 7px solid white;
+            border-radius: 15px;
+            padding: 2%;
+        }
+
+        #game-container {
+            text-align: center;
+        }
+
+        h1 {
+            color: white;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(50px, 1fr));
+            gap: 5px;
+            margin: 20px 0;
+        }
+
+        .cell {
+            width: 80px;
+            height: 80px;
+            border: 3px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 10%;
+            overflow: hidden;
+        }
+
+        .cell:hover {
+            background-color: #141414;
+        }
+
+        #restart-btn {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #236088;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #restart-btn:hover {
+            background-color: #2980b9;
+        }
+
+        #back{
+        height: 50px;
+        width: 50px;
+        border: 3px solid white;
+        border-radius: 50px;
+        font-weight: bold;
+        position: absolute;
+        left: 8%;
+        top: 11%;
+        }
+
+        #footer{
+       padding: 20px;
+       height: 1%;
+       text-align: center;
+       font-size: 15px;
+       color: white;
+       border: 3px solid white;
+       border-radius: 15px;
+       position: absolute;
+       bottom: 0;
+       }
+
+       #header{
+       padding-top: 15px;
+       padding-bottom: 5px;
+       height: 50px;
+       width: 60%;
+       text-align: center;
+       font-size: 40px;
+       font-weight: bold;
+       color: white;
+       border: 3px solid white;
+       border-radius: 15px;
+       position: absolute;
+       top: 10%;
+       }
+
+    </style>
+
+<body>
+
+<div id="header">krishnadhaval</div>    
+
+<div id="game-container">
+    <h1>RiteTacToe</h1>
+    
+    <div id="board"></div>
+    <button id="restart-btn" onclick="resetGame()">Restart</button>
+</div>
+
+<div id="back">
+    <a href="index.html"><img src="Background_img.jpg" alt="&larr;" style="height: 50px; width:50px;"></a>
+</div>
+
+
+<div id="footer" >All Rights Reserved | By Ritesh Dhekane
+</div>
+
+
+<script>
+    const board = document.getElementById('board');
+    const restartBtn = document.getElementById('restart-btn');
+    let currentPlayer = 'X';
+    let gameBoard = ['', '', '', '', '', '', '', '', ''];
+
+    // Create cells and add event listeners
+    for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.index = i;
+        cell.addEventListener('click', handleCellClick);
+        board.appendChild(cell);
+    }
+
+    function handleCellClick(event) {
+        const index = event.target.dataset.index;
+
+        if (gameBoard[index] === '' && !isGameOver()) {
+            gameBoard[index] = currentPlayer;
+            event.target.textContent = currentPlayer;
+            if (isWinner()) {
+                alert(`Player ${currentPlayer} wins!`);
+                resetGame();
+            } else if (isBoardFull()) {
+                alert('It\'s a draw!');
+                resetGame();
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            }
+        }
+    }
+
+    function isWinner() {
+        const winningCombinations = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+            [0, 4, 8], [2, 4, 6]             // Diagonals
+        ];
+
+        return winningCombinations.some(combination =>
+            gameBoard[combination[0]] !== '' &&
+            gameBoard[combination[0]] === gameBoard[combination[1]] &&
+            gameBoard[combination[1]] === gameBoard[combination[2]]
+        );
+    }
+
+    function isBoardFull() {
+        return gameBoard.every(cell => cell !== '');
+    }
+
+    function isGameOver() {
+        return isWinner() || isBoardFull();
+    }
+
+    function resetGame() {
+        gameBoard = ['', '', '', '', '', '', '', '', ''];
+        currentPlayer = 'X';
+
+        // Clear the board
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.textContent = '';
+        });
+    }
+</script>
+
+</body>
+</html>
